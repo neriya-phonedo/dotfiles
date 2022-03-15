@@ -36,21 +36,6 @@ set smartindent           " Makes indenting smart
 set autoindent            " indent a new line the same amount as the line just typed
 set smarttab              " Makes tabbing smarter will realize you have 2 vs 4
 set number                " add line numbers
-" toggle relative number
-augroup numbertoggle
-  autocmd!
-  autocmd BufEnter,FocusGained,InsertLeave,WinEnter * if &nu && mode() != "i" | set rnu   | endif
-  autocmd BufLeave,FocusLost,InsertEnter,WinLeave   * if &nu                  | set nornu | endif
-augroup END
-
-" set foldmethod according to a file type
-augroup foldingmethod
-  autocmd FileType c setlocal foldmethod=syntax
-  autocmd FileType cpp setlocal foldmethod=syntax
-  autocmd FileType python setlocal foldmethod=indent
-  autocmd FileType ruby setlocal foldmethod=indent
-augroup END
-
 set cc=80                 " set an 80 column border for good coding style
 filetype plugin indent on "allow auto-indenting depending on file type
 syntax on                 " syntax highlighting
@@ -69,10 +54,25 @@ set updatetime=300        " Faster completion
 set formatoptions-=cro    " Stop newline continution of comments
 set scrolloff=5           " Start scroll 5 lines from the edges
 
-
+" colorscheme
 set background=dark
 set t_Co=256
 colorscheme gruvbox
+
+" toggle relative number
+augroup numbertoggle
+  autocmd!
+  autocmd BufEnter,FocusGained,InsertLeave,WinEnter * if &nu && mode() != "i" | set rnu   | endif
+  autocmd BufLeave,FocusLost,InsertEnter,WinLeave   * if &nu                  | set nornu | endif
+augroup END
+
+" set foldmethod according to a file type
+augroup foldingmethod
+  autocmd FileType c setlocal foldmethod=syntax
+  autocmd FileType cpp setlocal foldmethod=syntax
+  autocmd FileType python setlocal foldmethod=indent
+  autocmd FileType ruby setlocal foldmethod=indent
+augroup END
 
 " ----- MAPS ----
 nnoremap <S-Tab> :bp<cr>
@@ -106,6 +106,34 @@ nnoremap <C-left> <C-w>h<cr>
 " comments
 nmap <C-_> <Bslash>c<space>
 
+" ---------- automatic-closing-brackets ---------- "
+inoremap " ""<left>
+inoremap ' ''<left>
+inoremap ( ()<left>
+inoremap [ []<left>
+inoremap { {}<left>
+inoremap {<CR> {<CR>}<ESC>O
+inoremap {;<CR> {<CR>};<ESC>O
+
+vnoremap " :s/\%V\(.*\)\%V/"\1"/<CR>
+vnoremap ' :s/\%V\(.*\)\%V/'\1'/<CR>
+vnoremap ( :s/\%V\(.*\)\%V/(\1)/<CR>
+vnoremap [ :s/\%V\(.*\)\%V/[\1]/<CR>
+vnoremap { :s/\%V\(.*\)\%V/{\1}/<CR>
+
+inoremap ) <Esc>:call Close_par(")")<CR>a
+inoremap } <Esc>:call Close_par("}")<CR>a
+inoremap ] <Esc>:call Close_par("]")<CR>a
+
+function! Close_par(chr)
+  let char = getline('.')[col('.')]
+  if char == a:chr
+    exe "normal! l"
+    return
+  else
+    exe "normal! a".a:chr."\<Esc>"
+  endif
+endfunction
 
 " ----- Airline -----
 let g:airline#extensions#tabline#enabled = 1
