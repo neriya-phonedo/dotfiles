@@ -1,24 +1,27 @@
 call plug#begin()
  " Plugin Section
+ Plug 'ryanoasis/vim-devicons'                        " files icons
+ Plug 'tiagofumo/vim-nerdtree-syntax-highlight'       " more files icons
+ Plug 'scrooloose/nerdtree'                           " file tree navigate
+ Plug 'SirVer/ultisnips'                              " snippets
+ Plug 'honza/vim-snippets'                            " snippets
+ Plug 'preservim/nerdcommenter'                       " Comment functions so powerful—no comment necessary
+ Plug 'neoclide/coc.nvim', {'branch': 'release'}      " It's an intellisense engine for vim8 & neovim
+" Plug 'hrsh7th/nvim-cmp'                             " A completion engine plugin for neovim written in Lua 
+ Plug 'vim-airline/vim-airline'                       " Lean & mean status/tabline for vim that's light as air
+ Plug 'vim-airline/vim-airline-themes'                " This is the official theme repository for vim-airline
+ Plug 'sheerun/vim-polyglot'                          " A collection of language packs for Vim
+ Plug 'tpope/vim-fugitive'                            " Fugitive is the premier Vim plugin for Git. Or maybe it's the premier Git plugin for Vim
+ Plug 'airblade/vim-gitgutter'                        " A Vim plugin which shows a git diff in the sign column and more
+ Plug 'prettier/vim-prettier'                         " A vim plugin wrapper for prettier, pre-configured with custom default prettier settings.
+ Plug 'preservim/tagbar'                              " Tagbar is a Vim plugin that provides an easy way to browse the tags of the current file
+
+ Plug 'mg979/vim-visual-multi'                        " A better visual mode 
+
+ Plug 'davidhalter/jedi-vim' 
+ Plug 'dense-analysis/ale'
  Plug 'morhetz/gruvbox'
- Plug 'ryanoasis/vim-devicons'
- Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
- Plug 'SirVer/ultisnips'
- Plug 'honza/vim-snippets'
- Plug 'scrooloose/nerdtree'
- Plug 'preservim/nerdcommenter'
- Plug 'mhinz/vim-startify'
- Plug 'neoclide/coc.nvim', {'branch': 'release'}
- Plug 'hrsh7th/nvim-cmp'
- Plug 'vim-airline/vim-airline'
- Plug 'vim-airline/vim-airline-themes'
- Plug 'sheerun/vim-polyglot'
- Plug 'tpope/vim-fugitive'
- Plug 'airblade/vim-gitgutter'
- Plug 'honza/vim-snippets'
- Plug 'prettier/vim-prettier'
- Plug 'terryma/vim-multiple-cursors'
- Plug 'davidhalter/jedi-vim'
+ Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 call plug#end()
 
 " configuration
@@ -53,6 +56,7 @@ set nowritebackup         " This is recommended by coc
 set updatetime=300        " Faster completion
 set formatoptions-=cro    " Stop newline continution of comments
 set scrolloff=5           " Start scroll 5 lines from the edges
+set foldopen=block        " Open fold block
 
 " colorscheme
 set background=dark
@@ -73,6 +77,9 @@ augroup foldingmethod
   autocmd FileType python setlocal foldmethod=indent
   autocmd FileType ruby setlocal foldmethod=indent
 augroup END
+
+" ----- set leader -----
+let mapleader = " "
 
 " ----- MAPS ----
 nnoremap <S-Tab> :bp<cr>
@@ -104,7 +111,10 @@ nnoremap <C-right> <C-w>l<cr>
 nnoremap <C-left> <C-w>h<cr>
 
 " comments
-nmap <C-_> <Bslash>c<space>
+nmap <C-_> <leader>c<space>
+
+" search current word
+nnoremap <leader>h :let @/='\<<C-R>=expand("<cword>")<cr>\>'<cr>
 
 " ---------- automatic-closing-brackets ---------- "
 inoremap " ""<left>
