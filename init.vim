@@ -1,28 +1,30 @@
+" PLUGINS {{{
 call plug#begin()
- " Plugin Section
- Plug 'ryanoasis/vim-devicons'                        " files icons
- Plug 'tiagofumo/vim-nerdtree-syntax-highlight'       " more files icons
- Plug 'scrooloose/nerdtree'                           " file tree navigate
- Plug 'SirVer/ultisnips'                              " snippets
- Plug 'honza/vim-snippets'                            " snippets
- Plug 'preservim/nerdcommenter'                       " Comment functions so powerful—no comment necessary
- Plug 'neoclide/coc.nvim', {'branch': 'release'}      " It's an intellisense engine for vim8 & neovim
-" Plug 'hrsh7th/nvim-cmp'                             " A completion engine plugin for neovim written in Lua 
- Plug 'vim-airline/vim-airline'                       " Lean & mean status/tabline for vim that's light as air
- Plug 'vim-airline/vim-airline-themes'                " This is the official theme repository for vim-airline
- Plug 'sheerun/vim-polyglot'                          " A collection of language packs for Vim
- Plug 'tpope/vim-fugitive'                            " Fugitive is the premier Vim plugin for Git. Or maybe it's the premier Git plugin for Vim
- Plug 'airblade/vim-gitgutter'                        " A Vim plugin which shows a git diff in the sign column and more
- Plug 'prettier/vim-prettier'                         " A vim plugin wrapper for prettier, pre-configured with custom default prettier settings.
- Plug 'preservim/tagbar'                              " Tagbar is a Vim plugin that provides an easy way to browse the tags of the current file
-
- Plug 'mg979/vim-visual-multi'                        " A better visual mode 
-
- Plug 'davidhalter/jedi-vim' 
- Plug 'dense-analysis/ale'
- Plug 'morhetz/gruvbox'
- Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+  " Plugin Section
+  Plug 'dense-analysis/ale'                            " ALE is a plugin providing linting (syntax checking and semantic errors)
+  Plug 'neoclide/coc.nvim', {'branch': 'release'}      " It's an intellisense engine for vim8 & neovim
+  Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }  " Things you can do with fzf and Vim.
+  Plug 'junegunn/fzf.vim'                              " fzf is a general-purpose command-line fuzzy finder.
+  Plug 'morhetz/gruvbox'                               " gruvbox colorscheme
+  Plug 'davidhalter/jedi-vim'                          " awesome Python autocompletion with VIM
+  Plug 'preservim/nerdcommenter'                       " Comment functions so powerful—no comment necessary
+  Plug 'scrooloose/nerdtree'                           " file tree navigate
+  " Plug 'hrsh7th/nvim-cmp'                             " A completion engine plugin for neovim written in Lua
+  Plug 'preservim/tagbar'                              " Tagbar is a Vim plugin that provides an easy way to browse the tags of the current file
+  Plug 'SirVer/ultisnips'                              " snippets
+  Plug 'vim-airline/vim-airline'                       " Lean & mean status/tabline for vim that's light as air
+  Plug 'vim-airline/vim-airline-themes'                " This is the official theme repository for vim-airline
+  Plug 'ryanoasis/vim-devicons'                        " files icons
+  Plug 'tpope/vim-fugitive'                            " Fugitive is the premier Vim plugin for Git. Or maybe it's the premier Git plugin for Vim
+  Plug 'airblade/vim-gitgutter'                        " A Vim plugin which shows a git diff in the sign column and more
+  Plug 'ludovicchabant/vim-gutentags'                  " A Vim plugin that manages your tag files
+  Plug 'tiagofumo/vim-nerdtree-syntax-highlight'       " more files icons
+  Plug 'sheerun/vim-polyglot'                          " A collection of language packs for Vim
+  Plug 'prettier/vim-prettier'                         " A vim plugin wrapper for prettier, pre-configured with custom default prettier settings.
+  Plug 'honza/vim-snippets'                            " snippets
+  Plug 'mg979/vim-visual-multi'                        " A better visual mode
 call plug#end()
+" }}}
 
 " configuration
 set nocompatible          " disable compatibility to old-time vi
@@ -87,6 +89,12 @@ nnoremap <S-w> :bn<cr>
 nnoremap <C-q> :bp<bar>sp<bar>bn<bar>bd<cr>
 
 nnoremap <C-l> :NERDTreeToggle<cr>
+nnoremap <C-k> :Tagbar<cr>
+
+" spatial mode changes
+nnoremap <leader>i ea
+nnoremap <leader>a ea
+
 
 " escape to normal mode
 inoremap jj <esc>
@@ -111,10 +119,13 @@ nnoremap <C-right> <C-w>l<cr>
 nnoremap <C-left> <C-w>h<cr>
 
 " comments
-nmap <C-_> <leader>c<space>
+nnoremap <C-_> :call nerdcommenter#Comment('n', 'Toggle')<cr>
 
 " search current word
 nnoremap <leader>h :let @/='\<<C-R>=expand("<cword>")<cr>\>'<cr>
+
+" fix indent
+nnoremap <leader>g gg<S-v>G=<C-o>
 
 " ---------- automatic-closing-brackets ---------- "
 inoremap " ""<left>
@@ -162,6 +173,26 @@ let g:airline_right_sep = '◢'
 let g:airline_left_alt_sep = '╲'
 let g:airline_right_alt_sep = '╱'
 
+" ----- ALE -----
+" ALE map
+nnoremap ]e :ALENext<CR>
+nnoremap [e :ALEPrevious<CR>
+nnoremap <leader>f :ALEFix<CR>
+
+let g:ale_fixers = {
+      \ '*': ['remove_trailing_lines', 'trim_whitespace'],
+      \ 'python': [
+      \   'add_blank_lines_for_python_control_statements',
+      \   'autoflake',
+      \   'autoimport',
+      \   'autopep8',
+      \   'black',
+      \   'isort',
+      \   'yapf',
+      \   ]}
+
+let g:ale_fix_on_save = 1
+
 " ----- Ultisnips -----
 " ----- Commenter -----
 let g:NERDSpaceDelim = 2
@@ -169,4 +200,3 @@ let g:NERDCompactSexyComs = 1
 
 " ----- Prettier -----
 let g:prettier#autoformat_require_pragma = 0
-
