@@ -125,6 +125,10 @@ nnoremap <C-left> <C-w>h<cr>
 " comments
 nnoremap <C-_> :call nerdcommenter#Comment('n', 'Toggle')<cr>
 
+" git hunk jump
+nnoremap ]h :GitGutterNextHunk<cr>
+nnoremap [h :GitGutterPrevHunk<cr>
+
 " search current word
 nnoremap <leader>h :let @/='\<<C-R>=expand("<cword>")<cr>\>'<cr>n<cr>
 
