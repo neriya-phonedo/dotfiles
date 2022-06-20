@@ -88,6 +88,7 @@ nnoremap <S-Tab> :bp<cr>
 nnoremap <S-w> :bn<cr>
 nnoremap <C-q> :bp<bar>sp<bar>bn<bar>bd<cr>
 
+nnoremap cd :NERDTreeFind<cr>
 nnoremap <C-l> :NERDTreeToggle<cr>
 nnoremap <C-k> :Tagbar<cr>
 
@@ -101,6 +102,9 @@ inoremap jj <esc>
 inoremap kk <esc>
 inoremap kj <esc>
 inoremap jk <esc>
+
+" clean search
+nnoremap <esc> :noh<CR><esc>
 
 " move lines
 inoremap <A-j> <esc>:m+1<cr>i
@@ -122,10 +126,17 @@ nnoremap <C-left> <C-w>h<cr>
 nnoremap <C-_> :call nerdcommenter#Comment('n', 'Toggle')<cr>
 
 " search current word
-nnoremap <leader>h :let @/='\<<C-R>=expand("<cword>")<cr>\>'<cr>
+nnoremap <leader>h :let @/='\<<C-R>=expand("<cword>")<cr>\>'<cr>n<cr>
 
 " fix indent
 nnoremap <leader>g gg<S-v>G=<C-o>
+
+" --- cases change --- "
+" camel to snake
+nnoremap <leader>s viw:s/\%V\u/_\l\0/g<cr>
+" snake to camel
+nnoremap <leader>c viw:s/\%V_\(.\)/\u\1/g<cr>
+
 
 " ---------- automatic-closing-brackets ---------- "
 inoremap " ""<left>
@@ -185,11 +196,15 @@ let g:ale_fixers = {
       \   'add_blank_lines_for_python_control_statements',
       \   'autoflake',
       \   'autoimport',
-      \   'autopep8',
       \   'black',
       \   'isort',
       \   'yapf',
-      \   ]}
+      \   'autopep8',
+      \ ],
+      \ 'ruby': ['rubocop', 'sorbet'],
+      \ 'javascript': ['prettier', 'eslint'],
+      \ 'json': ['prettier']
+      \}
 
 let g:ale_fix_on_save = 1
 
