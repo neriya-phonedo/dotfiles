@@ -15,3 +15,5 @@ validate/!
 #nd/!
 #nd/!
 end/!
+run_tests_term_ui/!
+utf8
