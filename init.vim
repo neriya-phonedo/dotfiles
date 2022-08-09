@@ -106,7 +106,7 @@ nnoremap <C-q> :bp<bar>sp<bar>bn<bar>bd<cr>
 nnoremap cd :NERDTreeFind<cr>
 nnoremap <C-l> :NERDTreeToggle<cr>
 nnoremap <C-k> :Tagbar<cr>
-nnoremap <C-,> :BlamerToggle<cr>
+nnoremap <leader>b :BlamerToggle<cr>
 " }}}
 
 " spatial mode changes {{{
