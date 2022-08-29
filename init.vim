@@ -102,6 +102,10 @@ nnoremap ]b :bn<cr>
 nnoremap <C-q> :bp<bar>sp<bar>bn<bar>bd<cr>
 " }}}
 
+" terminal emulator {{{
+tnoremap <esc> <c-\><c-n>
+" }}}
+
 " file explorer, tagbar and blame toggle {{{
 nnoremap cd :NERDTreeFind<cr>
 nnoremap <C-l> :NERDTreeToggle<cr>
@@ -112,6 +116,7 @@ nnoremap <leader>b :BlamerToggle<cr>
 " spatial mode changes {{{
 nnoremap <leader>i ea
 nnoremap <leader>a ea
+nnoremap <leader>t :terminal<cr>
 " }}}
 
 " escape to normal mode {{{
@@ -254,6 +259,29 @@ let g:ale_fixers = {
 let g:ale_fix_on_save = 1
 
 autocmd FileType ruby let ale_fix_on_save = 0
+" }}}
+
+" ----- COC-nvim -----{{{
+" Make <CR> to accept selected completion item or notify coc.nvim to format
+" <C-g>u breaks current undo, please make your own choice.
+inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+" Use <c-space> to trigger completion.
+if has('nvim')
+  inoremap <silent><expr> <c-space> coc#refresh()
+else
+  inoremap <silent><expr> <c-@> coc#refresh()
+endif
+
+" GoTo code navigation.
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" Highlight the symbol and its references when holding the cursor.
+autocmd CursorHold * silent call CocActionAsync('highlight')
 " }}}
 
 " ----- Commenter ----- {{{
