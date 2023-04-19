@@ -1,3 +1,17 @@
 {
-  "coc.preferences.formatOnSaveFiletypes": ["css", "markdown", "python"]
+  "coc.preferences.formatOnSaveFiletypes": [
+    "css",
+    "dart",
+    "markdown",
+    "python",
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact",
+    "php"
+  ],
+  "clangd.path": "~/.config/coc/extensions/coc-clangd-data/install/15.0.0/clangd_15.0.0/bin/clangd",
+  "flutter.autoOpenDevLog": true,
+  "flutter.autoHideDevLog": true,
+  "flutter.openDevLogSplitCommand": "botright 10split"
 }

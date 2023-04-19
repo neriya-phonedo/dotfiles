@@ -8,9 +8,13 @@ call plug#begin()
   Plug 'junegunn/fzf.vim'                              " fzf is a general-purpose command-line fuzzy finder.
   Plug 'morhetz/gruvbox'                               " gruvbox colorscheme
   Plug 'davidhalter/jedi-vim'                          " awesome Python autocompletion with VIM
+  Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && npm i' }
+                                                       " markdown preview plugin for (neo)vim
   Plug 'preservim/nerdcommenter'                       " Comment functions so powerful—no comment necessary
+  Plug 'nvim-neorg/neorg'                              " Modernity meets insane extensibility. The future of organizing your life in Neovim
   Plug 'scrooloose/nerdtree'                           " file tree navigate
-  " Plug 'hrsh7th/nvim-cmp'                             " A completion engine plugin for neovim written in Lua
+  " Plug 'hrsh7th/nvim-cmp'                            " A completion engine plugin for neovim written in Lua
+  Plug 'mfussenegger/nvim-dap'                         " Debug Adapter Protocol client implementation for Neovim
   Plug 'nvim-lua/plenary.nvim'                         " All the lua functions I don't want to write twice. (REQUIRE by other plugins)
   Plug 'preservim/tagbar'                              " Tagbar is a Vim plugin that provides an easy way to browse the tags of the current file
   Plug 'SirVer/ultisnips'                              " snippets
@@ -26,7 +30,6 @@ call plug#begin()
   Plug 'honza/vim-snippets'                            " snippets
   Plug 'tpope/vim-surround'                            " Delete/change/add parentheses/quotes/XML-tags/much more with ease
   Plug 'mg979/vim-visual-multi'                        " A better visual mode
-  Plug 'nvim-neorg/neorg'                              " Modernity meets insane extensibility. The future of organizing your life in Neovim
 call plug#end()
 " }}}
 
@@ -50,7 +53,7 @@ filetype plugin indent on "allow auto-indenting depending on file type
 syntax on                 " syntax highlighting
 set mouse=a               " enable mouse click
 set clipboard=unnamedplus " using system clipboard
-filetype plugin on
+" filetype plugin on
 set ttyfast               " Speed up scrolling in Vim
 set hidden                " enable change buffers without saving
 set spell                 " enable spell check (may need to download language package)
@@ -83,6 +86,11 @@ augroup END
 augroup foldingmethod
   autocmd FileType c setlocal foldmethod=syntax
   autocmd FileType cpp setlocal foldmethod=syntax
+  autocmd FileType php setlocal foldmethod=indent
+  autocmd FileType json setlocal foldmethod=syntax
+  autocmd FileType javascript setlocal foldmethod=syntax
+  autocmd FileType typescript setlocal foldmethod=syntax
+  autocmd FileType typescriptreact setlocal foldmethod=syntax
   autocmd FileType python setlocal foldmethod=indent
   autocmd FileType ruby setlocal foldmethod=indent
   autocmd FileType yaml setlocal foldmethod=indent
@@ -99,7 +107,7 @@ nnoremap <S-Tab> :bp<cr>
 nnoremap <S-w> :bn<cr>
 nnoremap [b :bp<cr>
 nnoremap ]b :bn<cr>
-nnoremap <C-q> :bp<bar>sp<bar>bn<bar>bd<cr>
+nnoremap <C-q> :bp<bar>bd #<cr>
 " }}}
 
 " terminal emulator {{{
@@ -117,6 +125,7 @@ nnoremap <leader>b :BlamerToggle<cr>
 nnoremap <leader>i ea
 nnoremap <leader>a ea
 nnoremap <leader>t :terminal<cr>
+nnoremap <leader>x :belowright 10sp<cr> :terminal<cr>i
 " }}}
 
 " escape to normal mode {{{
@@ -253,12 +262,15 @@ let g:ale_fixers = {
       \ ],
       \ 'ruby': ['rubocop', 'sorbet'],
       \ 'javascript': ['prettier', 'eslint'],
+      \ 'typescript': ['prettier', 'tslint'],
       \ 'json': ['prettier']
       \}
 
 let g:ale_fix_on_save = 1
 
 autocmd FileType ruby let ale_fix_on_save = 0
+autocmd FileType markdown let ale_fix_on_save = 0
+autocmd FileType json let ale_fix_on_save = 0
 " }}}
 
 " ----- COC-nvim -----{{{
@@ -276,12 +288,15 @@ endif
 
 " GoTo code navigation.
 nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> <c-]> <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> <c-p> <Plug>(coc-references)
 nmap <silent> gr <Plug>(coc-references)
 
 " Highlight the symbol and its references when holding the cursor.
 autocmd CursorHold * silent call CocActionAsync('highlight')
+
 " }}}
 
 " ----- Commenter ----- {{{
@@ -304,3 +319,9 @@ command! -bang -nargs=* GGrep
   \   'git grep --line-number -- '.shellescape(<q-args>), 0,
   \   fzf#vim#with_preview({'dir': systemlist('git rev-parse --show-toplevel')[0]}), <bang>0)
 "}}}
+
+" ----- NERDTree ----- {{{
+let NERDTreeShowHidden=1
+"}}}
+
+lua require('dap_conf')
